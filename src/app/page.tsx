@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import {
   Card,
   CardHeader,
@@ -28,6 +27,12 @@ export default function HomePage() {
             We have repositioned our <span className='font-bold'>£2,000</span> support initiative from a traditional &ldquo;scholarship&ldquo; to a comprehensive student success programme.
           </p>
           <Button
+            onClick={() => {
+              const formSection = document.getElementById("scholarshipForm")
+              if (formSection) {
+                formSection.scrollIntoView({ behavior: "smooth" })
+              }
+            }}
             className="mt-8 bg-white/90 hover:bg-white/95 text-black px-8 py-5 cursor-pointer"
           >
             Apply Now
@@ -102,7 +107,9 @@ export default function HomePage() {
       </section>
 
       {/* Application Form Section */}
-      <ScholarshipForm />
+      <div id="scholarshipForm" className="w-full max-w-3xl">
+        <ScholarshipForm />
+      </div>
     </main>
   )
 }
