@@ -42,7 +42,7 @@ export default function HomePage() {
 
       {/* Info Cards Section */}
       <section className='mt-[-6rem] w-full max-w-5xl z-1 flex flex-col gap-4 bg-gray-50/95 backdrop-blur-xs rounded-4xl border border-black/10 shadow-xs py-8 px-24'>
-        <h1 className='text-center text-2xl bg-clip-text text-transparent bg-gradient-to-b from-black to-black/60 font-bold'>Our program includes</h1>
+        <h1 className='text-center text-2xl bg-clip-text text-transparent bg-gradient-to-b from-black to-black/60 font-bold'>Our programme includes</h1>
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
           <Card className="shadow-md bg-gradient-to-t from-slate-50 to-white">
             <CardHeader>
@@ -55,7 +55,7 @@ export default function HomePage() {
           </Card>
           <Card className="shadow-md bg-gradient-to-t from-slate-50 to-white">
             <CardHeader>
-              <CardTitle className="text-center bg-clip-text bg-gradient-to-b from-orange-800 to-orange-600 text-transparent font-bold py-1">Career Excellence Program</CardTitle>
+              <CardTitle className="text-center bg-clip-text bg-gradient-to-b from-orange-800 to-orange-600 text-transparent font-bold py-1">Career Excellence Programme</CardTitle>
               <CardDescription className='text-center space-y-1'>
                 <p className='text-3xl font-medium'>£1,500</p>
                 <p>over a course of 2 years</p>
@@ -95,7 +95,7 @@ export default function HomePage() {
       {/* Why This Programme (text + image) */}
       <section className="my-16 px-4 w-full max-w-5xl flex flex-col md:flex-row items-center gap-8">
         <div className="space-y-4 text-center">
-          <h2 className="text-3xl font-semibold">Why This Program?</h2>
+          <h2 className="text-3xl font-semibold">Why This Programme?</h2>
           <p className='text-lg'>
             This programme serves <b className='font-medium'>400+</b> international students annually and focuses on <b className='font-medium'>holistic support</b> rather than just funding.
             Beyond just mentorship, it&rsquo;s a complete career solution, an investment in your future!

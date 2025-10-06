@@ -137,10 +137,10 @@ export function ScholarshipForm() {
       <Card className="rounded-3xl bg-black/1">
         <CardHeader>
           <CardTitle className="text-2xl text-center bg-clip-text bg-gradient-to-b from-orange-800 to-orange-600 text-transparent font-bold py-1">
-            Apply Now
+            Apply Now!
           </CardTitle>
           <CardDescription className="text-center space-y-1">
-            Fill in some basic information to gain a real chance to access our community!
+            Fill in some basic information to gain a real chance to access our scholarship today!
           </CardDescription>
         </CardHeader>
         <CardContent>
