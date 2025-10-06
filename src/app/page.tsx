@@ -25,7 +25,7 @@ export default function HomePage() {
             International <span className='bg-clip-text text-transparent bg-gradient-to-b from-orange-50 to-orange-300'>Student Success</span> Programme
           </h1>
           <p className="mt-6 max-w-2xl mx-auto text-md font-medium">
-            We've repositioned our <span className='font-bold'>£2,000</span> support initiative from a traditional "scholarship" to a comprehensive student success programme.
+            We've repositioned our <span className='font-bold'>£2,000</span> support initiative from a traditional &ldquo;scholarship&ldquo; to a comprehensive student success programme.
           </p>
           <Button
             className="mt-8 bg-white/90 hover:bg-white/95 text-black px-8 py-5 cursor-pointer"
@@ -93,10 +93,10 @@ export default function HomePage() {
           <h2 className="text-3xl font-semibold">Why This Program?</h2>
           <p className='text-lg'>
             This programme serves <b className='font-medium'>400+</b> international students annually and focuses on <b className='font-medium'>holistic support</b> rather than just funding.
-            Beyond just mentorship, it’s a complete career solution, an investment in your future!
+            Beyond just mentorship, it&rsquo;s a complete career solution, an investment in your future!
           </p>
           <p className="font-semibold text-lg">
-            Don’t just pay tuition — invest in a programme that pays for itself in your career.
+            Don&rsquo;t just pay tuition — invest in a programme that pays for itself in your career.
           </p>
         </div>
       </section>
