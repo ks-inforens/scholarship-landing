@@ -6,58 +6,11 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-  CardContent,
-  CardFooter,
 } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from '@/components/ui/select'
 import { ScholarshipForm } from '@/components/ScholarshipForm'
 
-const courses = [
-  'Computer Science',
-  'Business Administration',
-  'Engineering',
-  'Medicine',
-  'Design',
-  'Law',
-  'Economics',
-]
-
-const universitiesList = [
-  'University of Oxford',
-  'Harvard University',
-  'MIT',
-  'University of Toronto',
-  'National University of Singapore',
-  'University College Dublin',
-]
-
 export default function HomePage() {
-  const [preferredUniversities, setPreferredUniversities] = useState<string[]>([])
-  const [selectedUniversity, setSelectedUniversity] = useState<string>('')
-  const [desiredCourse, setDesiredCourse] = useState<string>('')
-  // other form states if you want to control them
-
-  const addUniversity = () => {
-    if (selectedUniversity && !preferredUniversities.includes(selectedUniversity)) {
-      setPreferredUniversities([...preferredUniversities, selectedUniversity])
-    }
-  }
-
-  const removeUniversity = (uni: string) => {
-    setPreferredUniversities(preferredUniversities.filter((u) => u !== uni))
-  }
-
   return (
     <main className="flex flex-col items-center bg-gradient-to-t from-white to-orange-50">
       {/* Hero Section */}
