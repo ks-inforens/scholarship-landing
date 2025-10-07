@@ -86,7 +86,7 @@ export function Mentors() {
             onMouseEnter={() => setHovered(index)}
             onMouseLeave={() => setHovered(null)}
           >
-            <p className="text-gray-700 font-medium">"{mentor.review}"</p>
+            <p className="text-gray-700 font-medium">&quot;{mentor.review}&quot;</p>
             <div className="flex items-center gap-1">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star
