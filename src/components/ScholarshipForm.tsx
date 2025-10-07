@@ -154,7 +154,7 @@ export function ScholarshipForm() {
             Apply Now!
           </CardTitle>
           <CardDescription className="text-center space-y-1">
-            Fill in some basic information to gain a real chance to access our scholarship today!
+            This is a highly competitive scholarship opportunity, and only the top 400 applicants with the most compelling and well-thought-out responses will be selected.
           </CardDescription>
         </CardHeader>
         <CardContent>

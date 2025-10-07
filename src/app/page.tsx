@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button'
 import { ScholarshipForm } from '@/components/ScholarshipForm'
 import { FadeInUp } from '@/lib/animations'
 import { Mentors } from '@/components/Mentors'
+import { LogoCarousel } from '@/components/Carousel'
+import { EventsGallery } from '@/components/EventsGallery'
 
 export default function HomePage() {
   return (
@@ -17,8 +19,8 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="w-full bg-black/80 relative shadow-md">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-80"
-          style={{ backgroundImage: `url('/hero.png')` }}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url('/hero.svg')` }}
         />
         <div className="relative z-10 text-center text-white py-40 px-4">
           <FadeInUp delay={0.1}>
@@ -69,34 +71,29 @@ export default function HomePage() {
                 <CardDescription className='text-center space-y-3'>
                   <p className='text-3xl font-medium'>£1,500</p>
                   <p className='text-orange-700/80 font-bold uppercase'>worth of mentorship across 2 years</p>
-                  <p>Our mentors will provide career mentorship, CV reviews, interview practice and practical advice to help you land your dream job.</p>
+                  <p>Our mentors will provide career mentorship, CV reviews, and practical advice to guide you in your job hunting with the right resources and the right knowledge.</p>
                 </CardDescription>
               </CardHeader>
             </Card>
             <Card className="shadow-md bg-gradient-to-t from-slate-50 to-white">
-              <CardHeader>
+              <CardHeader className='space-y-2'>
                 <CardTitle className="text-center bg-clip-text bg-gradient-to-b from-orange-800 to-orange-600 text-transparent font-bold py-1">Elite Mentor Network</CardTitle>
-                <CardDescription className='text-center space-y-1'>
-                  <div className='mx-6 grid grid-cols-4 gap-6 justify-items-center py-2'>
-                    <img className='h-10 w-10 md:h-14 md:w-14 rounded-full border border-black/20' src="/companies/google.png" />
-                    <img className='h-10 w-10 md:h-14 md:w-14 rounded-full border border-black/20' src="/companies/amazon.png" />
-                    <img className='h-10 w-10 md:h-14 md:w-14 rounded-full border border-black/20' src="/companies/mckinsey.png" />
-                    <img className='h-10 w-10 md:h-14 md:w-14 rounded-full border border-black/20' src="/companies/nhs.png" />
-                  </div>
+                <CardDescription className='text-center space-y-2'>
+                  <LogoCarousel />
                   <p>Access to our strong mentor network working at top companies</p>
                 </CardDescription>
               </CardHeader>
             </Card>
             <Card className="shadow-md bg-gradient-to-t from-slate-50 to-white">
-              <CardHeader>
-                <CardTitle className="text-center bg-clip-text bg-gradient-to-b from-orange-800 to-orange-600 text-transparent font-bold py-1">Landing Support Services</CardTitle>
+              <CardHeader className='space-y-1'>
+                <CardTitle className="text-center bg-clip-text bg-gradient-to-b from-orange-800 to-orange-600 text-transparent font-bold py-1">Eligibility Requirements</CardTitle>
                 <CardDescription className='text-center space-y-1'>
                   <div className='mx-16 grid grid-cols-3 gap-6 justify-items-center py-2'>
-                    <img className='h-10 w-10 md:h-14 md:w-14 rounded-full border border-black/20' src="/countries/uk.png" />
-                    <img className='h-10 w-10 md:h-14 md:w-14 rounded-full border border-black/20' src="/countries/ireland.png" />
-                    <img className='h-10 w-10 md:h-14 md:w-14 rounded-full border border-black/20' src="/countries/dubai.png" />
+                    <img className='h-10 w-10 md:h-12 md:w-12 rounded-full border border-black/20' src="/countries/uk.png" />
+                    <img className='h-10 w-10 md:h-12 md:w-12 rounded-full border border-black/20' src="/countries/ireland.png" />
+                    <img className='h-10 w-10 md:h-12 md:w-12 rounded-full border border-black/20' src="/countries/dubai.png" />
                   </div>
-                  <p>Practical arrival assistance in UK, Ireland and Dubai</p>
+                  <p>Currently, this scholarship is available to international students planning to study in the UK, Ireland or Dubai.</p>
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -168,13 +165,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="w-full px-4 md:px-8">
-        <Mentors />
+      <section className='w-full px-4 mb-16'>
+        <EventsGallery />
       </section>
 
       {/* Application Form Section */}
       <FadeInUp delay={0.7} className='w-full'>
-        <div id="scholarshipForm" className="w-full flex justify-center py-16">
+        <div id="scholarshipForm" className="w-full flex justify-center py-8">
           <ScholarshipForm />
         </div>
       </FadeInUp>
