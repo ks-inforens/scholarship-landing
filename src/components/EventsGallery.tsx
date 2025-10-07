@@ -24,7 +24,7 @@ const images = [
 
 export function EventsGallery() {
     return (
-        <section className="relative flex flex-col gap-8 items-center w-full bg-black/5 py-16 px-4 md:px-12 rounded-4xl">
+        <section className="relative flex flex-col gap-8 items-center w-full bg-black/5 py-16 rounded-4xl">
             <h1 className="text-3xl font-semibold capitalize bg-clip-text text-transparent bg-gradient-to-b from-black/80 to-black/60 text-center py-1">
                 A <span className="bg-clip-text text-transparent bg-gradient-to-b from-orange-700 to-orange-500">glimpse</span> of our strong community
             </h1>
@@ -48,7 +48,7 @@ export function EventsGallery() {
                                 key={index}
                                 className="md:basis-1/3 basis-full px-2"
                             >
-                                <div className="aspect-square overflow-hidden rounded-3xl w-full relative">
+                                <div className="aspect-square overflow-hidden w-full relative">
                                     <Image
                                         src={src}
                                         alt={`Event ${index + 1}`}
