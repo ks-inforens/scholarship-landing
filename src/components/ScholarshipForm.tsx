@@ -21,6 +21,15 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card"
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
@@ -28,7 +37,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useEffect, useRef, useState } from "react"
 import { ChevronDown, X } from "lucide-react"
 import { toast } from "sonner"
-import  { Spinner } from "@/components/ui/spinner"
+import { Spinner } from "@/components/ui/spinner"
 
 const courseOptions = [
   "Computer Science",
@@ -53,7 +62,10 @@ export function ScholarshipForm() {
   const form = useForm<ScholarshipFormValues>({
     resolver: zodResolver(ScholarshipFormSchema),
     defaultValues: {
-      fullName: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
       preferredUniversities: [],
       desiredCourse: "",
       justification: "",
@@ -65,9 +77,10 @@ export function ScholarshipForm() {
   const selectedUniversities = form.watch("preferredUniversities")
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
-  const [submitted, setSubmitted] = useState(false)  
+  const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const [showDialog, setShowDialog] = useState(false)
 
   const toggleUniversity = (uni: string) => {
     if (selectedUniversities.includes(uni)) {
@@ -122,6 +135,7 @@ export function ScholarshipForm() {
       if (result.success) {
         toast.success("Successfully applied!")
         setSubmitted(true)
+        setShowDialog(true)
       } else {
         toast.error("Submission failed. Please try again.")
       }
@@ -133,7 +147,7 @@ export function ScholarshipForm() {
   }
 
   return (
-    <section className="px-4 w-full max-w-3xl mb-20">
+    <section className="px-4 w-full max-w-3xl">
       <Card className="rounded-3xl bg-black/1">
         <CardHeader>
           <CardTitle className="text-2xl text-center bg-clip-text bg-gradient-to-b from-orange-800 to-orange-600 text-transparent font-bold py-1">
@@ -149,14 +163,71 @@ export function ScholarshipForm() {
               {/* Full Name */}
               <FormField
                 control={form.control}
-                name="fullName"
+                name="firstName"
                 render={({ field }) => (
                   <FormItem className="flex flex-col items-center gap-3">
-                    <FormLabel>Full Name</FormLabel>
+                    <FormLabel>First Name</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Jane Doe"
-                        className="border border-input bg-white"
+                        placeholder="Jane"
+                        className="border border-input bg-white text-sm"
+                        {...field}
+                        disabled={submitted}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col items-center gap-3">
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Doe"
+                        className="border border-input bg-white text-sm"
+                        {...field}
+                        disabled={submitted}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col items-center gap-3">
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="jane.doe@gmail.com"
+                        className="border border-input bg-white text-sm"
+                        {...field}
+                        disabled={submitted}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col items-center gap-3">
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="(+44) 1234 567890"
+                        className="border border-input bg-white text-sm"
                         {...field}
                         disabled={submitted}
                       />
@@ -182,9 +253,8 @@ export function ScholarshipForm() {
                         onKeyDown={(e) => {
                           if (e.key === "Enter" && !submitted) setIsDropdownOpen((prev) => !prev)
                         }}
-                        className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${
-                          submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-                        }`}
+                        className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                          }`}
                       >
                         <div className="flex flex-wrap gap-1 items-center">
                           {selectedUniversities.length > 0 ? (
@@ -263,7 +333,7 @@ export function ScholarshipForm() {
                     <FormLabel>Desired Course</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value} disabled={submitted}>
                       <FormControl>
-                        <SelectTrigger className="w-full border border-input bg-white">
+                        <SelectTrigger className="w-full border border-input bg-white text-sm">
                           <SelectValue placeholder="Select a course" />
                         </SelectTrigger>
                       </FormControl>
@@ -291,7 +361,7 @@ export function ScholarshipForm() {
                       <Textarea
                         rows={4}
                         placeholder="Share your reasons..."
-                        className="border border-input bg-white"
+                        className="border border-input bg-white text-sm"
                         {...field}
                         disabled={submitted}
                       />
@@ -312,7 +382,7 @@ export function ScholarshipForm() {
                       <Textarea
                         rows={4}
                         placeholder="Explain how this opportunity will help you..."
-                        className="border border-input bg-white"
+                        className="border border-input bg-white text-sm"
                         {...field}
                         disabled={submitted}
                       />
@@ -327,7 +397,7 @@ export function ScholarshipForm() {
                 <Button
                   type="submit"
                   className="w-full max-w-sm bg-[#db5800] hover:bg-[#cb5100] text-white rounded-full cursor-pointer"
-                  disabled={submitted}
+                  disabled={submitted || loading}
                 >
                   {submitted ? "Application Submitted" : loading ? <Spinner /> : "Submit Application"}
                 </Button>
@@ -336,6 +406,40 @@ export function ScholarshipForm() {
           </Form>
         </CardContent>
       </Card>
+
+      {/* Next Steps after Submission */}
+      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+        <DialogContent className="max-w-md rounded-xl">
+          <DialogHeader>
+            <DialogTitle className="text-green-800 text-xl">Application Submitted 🎉</DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground mt-2">
+              Your application has been submitted successfully!
+            </DialogDescription>
+            <DialogDescription className="text-sm text-muted-foreground">
+              Our admissions team is reviewing your application and will contact with regards to the decision soon.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="mt-2 space-y-3">
+            <h3 className="text-md font-semibold text-black/80">Next Steps</h3>
+            <ul className="list-disc list-inside text-sm text-black/60 space-y-1">
+              <li>Login/create an account on Inforens to track your application status.</li>
+              <li>Join our vibrant student community to connect with peers and mentors.</li>
+              <li>Explore other plans and benefits we offer to international students.</li>
+            </ul>
+          </div>
+
+          <DialogFooter className="flex flex-col gap-2 mt-4 sm:flex-row sm:justify-start">
+            <a
+              href="https://www.inforens.com"
+              target="_blank"
+              className="justify-center items-center rounded-md bg-[#db5800] px-4 py-2 text-sm font-medium text-white hover:bg-[#cb5100] transition"
+            >
+              Login Now
+            </a>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </section>
   )
 }
