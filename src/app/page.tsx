@@ -78,10 +78,10 @@ export default function HomePage() {
                 <CardTitle className="text-center bg-clip-text bg-gradient-to-b from-orange-800 to-orange-600 text-transparent font-bold py-1">Elite Mentor Network</CardTitle>
                 <CardDescription className='text-center space-y-1'>
                   <div className='mx-6 grid grid-cols-4 gap-6 justify-items-center py-2'>
-                    <img className='h-14 w-14 rounded-full border border-black/20' src="/companies/google.png" />
-                    <img className='h-14 w-14 rounded-full border border-black/20' src="/companies/amazon.png" />
-                    <img className='h-14 w-14 rounded-full border border-black/20' src="/companies/mckinsey.png" />
-                    <img className='h-14 w-14 rounded-full border border-black/20' src="/companies/nhs.png" />
+                    <img className='h-10 w-10 md:h-14 md:w-14 rounded-full border border-black/20' src="/companies/google.png" />
+                    <img className='h-10 w-10 md:h-14 md:w-14 rounded-full border border-black/20' src="/companies/amazon.png" />
+                    <img className='h-10 w-10 md:h-14 md:w-14 rounded-full border border-black/20' src="/companies/mckinsey.png" />
+                    <img className='h-10 w-10 md:h-14 md:w-14 rounded-full border border-black/20' src="/companies/nhs.png" />
                   </div>
                   <p>Access to our strong mentor network working at top companies</p>
                 </CardDescription>
@@ -92,9 +92,9 @@ export default function HomePage() {
                 <CardTitle className="text-center bg-clip-text bg-gradient-to-b from-orange-800 to-orange-600 text-transparent font-bold py-1">Landing Support Services</CardTitle>
                 <CardDescription className='text-center space-y-1'>
                   <div className='mx-16 grid grid-cols-3 gap-6 justify-items-center py-2'>
-                    <img className='h-14 w-14 rounded-full border border-black/20' src="/countries/uk.png" />
-                    <img className='h-14 w-14 rounded-full border border-black/20' src="/countries/ireland.png" />
-                    <img className='h-14 w-14 rounded-full border border-black/20' src="/countries/dubai.png" />
+                    <img className='h-10 w-10 md:h-14 md:w-14 rounded-full border border-black/20' src="/countries/uk.png" />
+                    <img className='h-10 w-10 md:h-14 md:w-14 rounded-full border border-black/20' src="/countries/ireland.png" />
+                    <img className='h-10 w-10 md:h-14 md:w-14 rounded-full border border-black/20' src="/countries/dubai.png" />
                   </div>
                   <p>Practical arrival assistance in UK, Ireland and Dubai</p>
                 </CardDescription>
