@@ -51,7 +51,7 @@ export function LogoCarousel() {
                 {logos.map((src, index) => (
                     <CarouselItem
                         key={index}
-                        className="basis-1/6 flex justify-center"
+                        className="basis-1/4 md:basis-1/6 -p-0 flex justify-center"
                     >
                         <img
                             src={src}
