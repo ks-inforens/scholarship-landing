@@ -7,7 +7,7 @@ import {
     CarouselItem,
 } from "@/components/ui/carousel"
 
-export function ImgCarousel({ items }: { items: string[] }) {
+export function UniCarousel({ items }: { items: string[] }) {
     return (
         <Carousel
             opts={{
@@ -22,17 +22,19 @@ export function ImgCarousel({ items }: { items: string[] }) {
             ]}
             className="w-full max-w-6xl mx-auto"
         >
-            <CarouselContent className="-ml-4">
+            <CarouselContent>
                 {items.map((src, index) => (
                     <CarouselItem
                         key={index}
-                        className="basis-1/4 -p-0 flex justify-center"
+                        className="basis-1/4 md:1/6 flex justify-center"
                     >
-                        <img
-                            src={src}
-                            alt={`Logo ${index}`}
-                            className="h-10 md:h-14 object-contain"
-                        />
+                        <div className="h-14 px-2">
+                            <img
+                                src={src}
+                                alt={`Logo ${index}`}
+                                className="h-full w-full object-contain"
+                            />
+                        </div>
                     </CarouselItem>
                 ))}
             </CarouselContent>

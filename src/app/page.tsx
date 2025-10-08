@@ -9,7 +9,8 @@ import {
 import { Button } from '@/components/ui/button'
 import { ScholarshipForm } from '@/components/ScholarshipForm'
 import { FadeInUp } from '@/lib/animations'
-import { ImgCarousel } from '@/components/Carousel'
+import { LogoCarousel } from '@/components/LogoCarousel'
+import { UniCarousel } from '@/components/UniCarousel'
 import { EventsGallery } from '@/components/EventsGallery'
 import { logos, universities } from '@/data/imagesData'
 import { Steps } from '@/components/Steps'
@@ -80,7 +81,7 @@ export default function HomePage() {
               <CardHeader className='space-y-2'>
                 <CardTitle className="text-center bg-clip-text bg-gradient-to-b from-orange-800 to-orange-600 text-transparent font-bold py-1">Elite Mentor Network</CardTitle>
                 <CardDescription className='text-center space-y-2'>
-                  <ImgCarousel items={logos} />
+                  <LogoCarousel items={logos} />
                   <p>Access to our strong mentor network working at top companies</p>
                 </CardDescription>
               </CardHeader>
@@ -94,7 +95,7 @@ export default function HomePage() {
                     <img className='h-10 w-10 md:h-12 md:w-12 rounded-full border border-black/20' src="/countries/ireland.png" />
                     <img className='h-10 w-10 md:h-12 md:w-12 rounded-full border border-black/20' src="/countries/dubai.png" />
                   </div>
-                  <p>Currently, this scholarship is available to international students planning to study in the UK, Ireland or Dubai.</p>
+                  <p>Currently, this scholarship is available to international students planning to study in the UK, Ireland or UAE.</p>
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -128,7 +129,7 @@ export default function HomePage() {
           </FadeInUp>
 
           <FadeInUp delay={0.7}>
-            <ImgCarousel items={universities} />
+            <UniCarousel items={universities} />
           </FadeInUp>
 
           <FadeInUp delay={0.9}>
@@ -158,7 +159,7 @@ export default function HomePage() {
         </div>
       </FadeInUp>
 
-      <section id='nextSteps' className="my-16 px-4 w-full max-w-5xl flex flex-col md:flex-row items-center gap-8">
+      <section id='nextSteps' className="my-8 px-4 w-full max-w-5xl flex flex-col md:flex-row items-center gap-8">
         <div className="space-y-6 text-center md:text-left">
           <FadeInUp delay={0.1}>
             <h2 className="text-3xl font-semibold text-gray-900 text-center">How we will help you!</h2>
