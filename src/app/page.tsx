@@ -17,7 +17,7 @@ import { Steps } from '@/components/Steps'
 
 export default function HomePage() {
   return (
-    <main className="flex flex-col items-center bg-gradient-to-t from-white to-orange-50">
+    <main className="flex flex-col items-center bg-gradient-to-t from-orange-50 via-white to-orange-50">
       {/* Hero Section */}
       <section className="w-full bg-black/80 relative shadow-md">
         <div
