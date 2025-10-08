@@ -124,7 +124,7 @@ export default function HomePage() {
 
           <FadeInUp delay={0.7}>
             <p className="text-md md:text-lg text-gray-700">
-              We connect you with real mentors, real alumni, and real admissions professionals from top global institutions, including <b className="font-semibold">Oxford, UCL, Imperial, LBS, LSE, Trinity College Dublin, University College Dublin, NYU Abu Dhabi, Zayed University</b> and many other universities.
+              We connect you with real mentors, real alumni, and real admissions professionals from top global institutions, including <b className="font-semibold">Oxford, UCL, Imperial, LBS, LSE, Trinity College Dublin, University College Dublin, NYU Abu Dhabi, Zayed University</b> and many other universities in the UK, Ireland and UAE.
             </p>
           </FadeInUp>
 
@@ -167,6 +167,15 @@ export default function HomePage() {
           <Steps />
         </div>
       </section >
+
+      <footer
+        className="py-8 w-full items-center rounded-t-4xl bg-center bg-cover"
+        style={{ backgroundImage: `url('/hero.svg')` }}
+      >
+        <FadeInUp delay={0.1}>
+          <h2 className="text-lg italic font-bold text-white text-center px-12">Your journey to global education starts here with Inforens!</h2>
+        </FadeInUp>
+      </footer >
     </main >
   )
 }
