@@ -31,22 +31,11 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useEffect, useRef, useState } from "react"
 import { ChevronDown, X } from "lucide-react"
 import { toast } from "sonner"
 import { Spinner } from "@/components/ui/spinner"
-
-const courseOptions = [
-  "Computer Science",
-  "Business Administration",
-  "Engineering",
-  "Medicine",
-  "Law",
-  "Design",
-  "Economics",
-]
 
 const universityOptions = [
   "Other",
@@ -59,6 +48,25 @@ const universityOptions = [
   "University College Dublin",
   "New York University, Abu Dhabi (NYUAD)",
   "Zayed University",
+]
+
+const courseOptions = [
+  "Other",
+  "Computer Science",
+  "Electrical Engineering",
+  "Mechanical Engineering",
+  "Civil Engineering",
+  "Business Administration",
+  "Economics",
+  "Finance",
+  "Medicine",
+  "Law",
+  "Psychology",
+  "Political Science",
+  "Architecture",
+  "Design",
+  "Data Science",
+  "Artificial Intelligence",
 ]
 
 export function ScholarshipForm() {
@@ -86,6 +94,12 @@ export function ScholarshipForm() {
   const [customUni, setCustomUni] = useState("")
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [showDialog, setShowDialog] = useState(false)
+
+  // ---- Course Dropdown States ----
+  const [isCourseDropdownOpen, setIsCourseDropdownOpen] = useState(false)
+  const [courseSearchQuery, setCourseSearchQuery] = useState("")
+  const [customCourse, setCustomCourse] = useState("")
+  const courseDropdownRef = useRef<HTMLDivElement>(null)
 
   const toggleUniversity = (uni: string) => {
     if (uni === "Other") return // handled separately
@@ -125,23 +139,25 @@ export function ScholarshipForm() {
       ) {
         setIsDropdownOpen(false)
       }
+      if (
+        courseDropdownRef.current &&
+        !courseDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsCourseDropdownOpen(false)
+      }
     }
-    if (isDropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside)
-    }
+    document.addEventListener("mousedown", handleClickOutside)
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
     }
-  }, [isDropdownOpen])
+  }, [])
 
   async function onSubmit(data: ScholarshipFormValues) {
     setLoading(true)
     try {
       const res = await fetch("/api/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       })
 
@@ -154,7 +170,7 @@ export function ScholarshipForm() {
       } else {
         toast.error("Submission failed. Please try again.")
       }
-    } catch (err) {
+    } catch {
       toast.error("Error submitting form. Please try again.")
     } finally {
       setLoading(false)
@@ -175,105 +191,34 @@ export function ScholarshipForm() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              {/* First Name */}
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col items-center gap-3">
-                    <FormLabel>First Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Jane"
-                        className="border border-input bg-white text-sm"
-                        {...field}
-                        disabled={submitted}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Last Name */}
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col items-center gap-3">
-                    <FormLabel>Last Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Doe"
-                        className="border border-input bg-white text-sm"
-                        {...field}
-                        disabled={submitted}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Email */}
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col items-center gap-3">
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="jane.doe@gmail.com"
-                        className="border border-input bg-white text-sm"
-                        {...field}
-                        disabled={submitted}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Phone */}
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col items-center gap-3">
-                    <FormLabel>Phone Number</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="(+44) 1234 567890"
-                        className="border border-input bg-white text-sm"
-                        {...field}
-                        disabled={submitted}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Grade */}
-              <FormField
-                control={form.control}
-                name="grade"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col items-center gap-3">
-                    <FormLabel>Grade (GCPA Percentage or equivalent)</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="e.g., 85%"
-                        className="border border-input bg-white text-sm"
-                        {...field}
-                        disabled={submitted}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {/* Basic Info */}
+              {[
+                ["firstName", "First Name", "Jane"],
+                ["lastName", "Last Name", "Doe"],
+                ["email", "Email", "jane.doe@gmail.com"],
+                ["phone", "Phone Number", "(+44) 1234 567890"],
+                ["grade", "Grade (GCPA Percentage or equivalent)", "e.g., 85%"],
+              ].map(([name, label, placeholder]) => (
+                <FormField
+                  key={name}
+                  control={form.control}
+                  name={name as keyof ScholarshipFormValues}
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col items-center gap-3">
+                      <FormLabel>{label}</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={placeholder}
+                          className="border border-input bg-white text-sm"
+                          {...field}
+                          disabled={submitted}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ))}
 
               {/* Preferred Universities */}
               <FormField
@@ -283,17 +228,12 @@ export function ScholarshipForm() {
                   <FormItem className="flex flex-col items-center gap-3">
                     <FormLabel>Preferred Universities</FormLabel>
                     <div ref={dropdownRef} className="w-full relative">
-                      {/* Trigger Box */}
                       <div
                         role="button"
                         tabIndex={0}
-                        onClick={() => !submitted && setIsDropdownOpen((prev) => !prev)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" && !submitted) setIsDropdownOpen((prev) => !prev)
-                        }}
-                        className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${
-                          submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-                        }`}
+                        onClick={() => !submitted && setIsDropdownOpen((p) => !p)}
+                        className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                          }`}
                       >
                         <div className="flex flex-wrap gap-1 items-center">
                           {selectedUniversities.length > 0 ? (
@@ -324,7 +264,6 @@ export function ScholarshipForm() {
                         <ChevronDown className="h-4 w-4 text-muted-foreground" />
                       </div>
 
-                      {/* Dropdown Menu */}
                       {isDropdownOpen && !submitted && (
                         <div className="absolute z-10 mt-2 w-full rounded-md bg-white border border-input shadow-lg p-3 space-y-2 max-h-60 overflow-y-auto">
                           <Input
@@ -348,13 +287,10 @@ export function ScholarshipForm() {
                             <div key={uni}>
                               {uni === "Other" ? (
                                 <div className="flex flex-col gap-2 px-2 py-1.5">
-                                  <label className="flex items-center justify-between cursor-pointer text-sm">
-                                    <span>Other (specify)</span>
-                                  </label>
-
+                                  <label className="text-sm">Other (specify)</label>
                                   <div className="flex items-center gap-2 mt-1">
                                     <Input
-                                      placeholder="Enter custom university name"
+                                      placeholder="University name"
                                       value={customUni}
                                       onChange={(e) => setCustomUni(e.target.value)}
                                       onKeyDown={(e) => {
@@ -378,9 +314,7 @@ export function ScholarshipForm() {
                                   </div>
                                 </div>
                               ) : (
-                                <label
-                                  className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-sm"
-                                >
+                                <label className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-sm">
                                   <span>{uni}</span>
                                   <input
                                     type="checkbox"
@@ -404,26 +338,98 @@ export function ScholarshipForm() {
               <FormField
                 control={form.control}
                 name="desiredCourse"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col items-center gap-3">
-                    <FormLabel>Desired Course</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value} disabled={submitted}>
-                      <FormControl>
-                        <SelectTrigger className="w-full border border-input bg-white text-sm">
-                          <SelectValue placeholder="Select a course" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {courseOptions.map((course) => (
-                          <SelectItem key={course} value={course}>
-                            {course}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                render={({ field }) => {
+                  const filteredCourses = courseOptions.filter((course) =>
+                    course.toLowerCase().includes(courseSearchQuery.toLowerCase())
+                  )
+
+                  const addCustomCourse = () => {
+                    const trimmed = customCourse.trim()
+                    if (trimmed) {
+                      form.setValue("desiredCourse", trimmed)
+                      setCustomCourse("")
+                      setIsCourseDropdownOpen(false)
+                    }
+                  }
+
+                  return (
+                    <FormItem className="flex flex-col items-center gap-3">
+                      <FormLabel>Desired Course</FormLabel>
+                      <div ref={courseDropdownRef} className="w-full relative">
+                        <div
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => !submitted && setIsCourseDropdownOpen((p) => !p)}
+                          className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                            }`}
+                        >
+                          <span className="truncate">
+                            {field.value || "Select your desired course"}
+                          </span>
+                          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                        </div>
+
+                        {isCourseDropdownOpen && !submitted && (
+                          <div className="absolute z-10 mt-2 w-full rounded-md bg-white border border-input shadow-lg p-3 space-y-2 max-h-60 overflow-y-auto">
+                            <Input
+                              value={courseSearchQuery}
+                              onChange={(e) => setCourseSearchQuery(e.target.value)}
+                              placeholder="Search..."
+                              className="w-full rounded-full bg-gray-100 border-none px-4 text-sm mb-2"
+                            />
+                            {filteredCourses.map((course) => (
+                              <div key={course}>
+                                {course === "Other" ? (
+                                  <div className="flex flex-col gap-2 px-2 py-1.5">
+                                    <label className="text-sm">Other (specify)</label>
+                                    <div className="flex items-center gap-2 mt-1">
+                                      <Input
+                                        placeholder="Course name"
+                                        value={customCourse}
+                                        onChange={(e) => setCustomCourse(e.target.value)}
+                                        onKeyDown={(e) => {
+                                          if (e.key === "Enter") {
+                                            e.preventDefault()
+                                            addCustomCourse()
+                                          }
+                                        }}
+                                        className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
+                                      />
+                                      <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={addCustomCourse}
+                                        disabled={!customCourse.trim()}
+                                        className="text-xs cursor-pointer"
+                                      >
+                                        Add
+                                      </Button>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <label
+                                    className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-sm"
+                                    onClick={() => {
+                                      form.setValue("desiredCourse", course)
+                                      setIsCourseDropdownOpen(false)
+                                    }}
+                                  >
+                                    <span>{course}</span>
+                                    {field.value === course && (
+                                      <span className="text-xs text-green-600">✓</span>
+                                    )}
+                                  </label>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )
+                }}
               />
 
               {/* Justification */}
