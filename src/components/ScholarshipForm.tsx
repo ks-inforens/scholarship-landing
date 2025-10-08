@@ -621,15 +621,34 @@ export function ScholarshipForm() {
 
       {/* Dialog after submission */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent>
+        <DialogContent className="max-w-xs rounded-xl">
           <DialogHeader>
-            <DialogTitle>Application Submitted</DialogTitle>
-            <DialogDescription>
-              Thank you for applying! We’ll review your submission and reach out soon.
+            <DialogTitle className="text-green-800 text-xl">Application Submitted 🎉</DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground mt-2 text-left">
+              Your application has been submitted successfully!
+            </DialogDescription>
+            <DialogDescription className="text-sm text-muted-foreground text-left">
+              Our admissions team is reviewing your application and will contact you soon.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
-            <Button onClick={() => setShowDialog(false)}>Close</Button>
+
+          <div className="mt-2 space-y-3">
+            <h3 className="text-md font-semibold text-black/80">Next Steps</h3>
+            <ul className="list-disc list-inside text-sm text-black/60 space-y-1">
+              <li>Login or create an account on Inforens to track your application status.</li>
+              <li>Join our student community to connect with peers and mentors.</li>
+              <li>Explore other plans and benefits we offer to international students.</li>
+            </ul>
+          </div>
+
+          <DialogFooter className="flex flex-col gap-2 mt-4 sm:flex-row sm:justify-start">
+            <a
+              href="https://www.inforens.com"
+              target="_blank"
+              className="justify-center items-center rounded-md bg-[#db5800] px-4 py-2 text-sm font-medium text-white hover:bg-[#cb5100] transition text-center md:text-left"
+            >
+              Login Now
+            </a>
           </DialogFooter>
         </DialogContent>
       </Dialog>
