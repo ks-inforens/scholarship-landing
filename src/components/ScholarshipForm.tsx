@@ -450,99 +450,112 @@ export function ScholarshipForm() {
                   <FormItem className="flex flex-col items-center gap-3">
                     <FormLabel>Preferred Universities</FormLabel>
                     <div ref={dropdownRef} className="w-full relative">
+                      {/* Trigger Box */}
                       <div
                         role="button"
                         tabIndex={0}
-                        onClick={() => !submitted && setIsDropdownOpen((p) => !p)}
-                        className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                        onClick={() => !submitted && setIsDropdownOpen((prev) => !prev)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && !submitted) setIsDropdownOpen((prev) => !prev)
+                        }}
+                        className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                          }`}
                       >
-                        <span className="truncate">
-                          {selectedUniversities.length > 0
-                            ? `${selectedUniversities.length} selected`
-                            : "Select universities"}
-                        </span>
+                        <div className="flex flex-wrap gap-1 items-center">
+                          {selectedUniversities.length > 0 ? (
+                            selectedUniversities.map((uni) => (
+                              <span
+                                key={uni}
+                                className="flex items-center gap-1 bg-gray-100 text-gray-800 px-2 py-0.5 rounded-full text-xs"
+                              >
+                                {uni}
+                                {!submitted && (
+                                  <X
+                                    className="h-3 w-3 cursor-pointer"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      form.setValue(
+                                        "preferredUniversities",
+                                        selectedUniversities.filter((u) => u !== uni)
+                                      )
+                                    }}
+                                  />
+                                )}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-muted-foreground text-sm">Select universities</span>
+                          )}
+                        </div>
                         <ChevronDown className="h-4 w-4 text-muted-foreground" />
                       </div>
 
+                      {/* Dropdown Menu */}
                       {isDropdownOpen && !submitted && (
                         <div className="absolute z-10 mt-2 w-full rounded-md bg-white border border-input shadow-lg p-3 space-y-2 max-h-60 overflow-y-auto">
                           <Input
-                            placeholder="Search universities..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="border border-gray-300 text-sm mb-2"
+                            placeholder="Search..."
+                            className="w-full rounded-full bg-gray-100 border-none px-4 text-sm mb-2"
                           />
-
-                          {filteredUniversities.map((uni) =>
-                            uni === "Other" ? (
-                              <div key={uni} className="flex flex-col gap-2 px-2 py-1.5">
-                                <label className="text-sm">Other (specify)</label>
-                                <div className="flex items-center gap-2 mt-1">
-                                  <Input
-                                    placeholder="Enter university name"
-                                    value={customUni}
-                                    onChange={(e) => setCustomUni(e.target.value)}
-                                    onKeyDown={(e) => {
-                                      if (e.key === "Enter") {
-                                        e.preventDefault()
-                                        addCustomUniversity()
-                                      }
-                                    }}
-                                    className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
-                                  />
-                                  <Button
-                                    type="button"
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={addCustomUniversity}
-                                    disabled={!customUni.trim()}
-                                    className="text-xs cursor-pointer"
-                                  >
-                                    Add
-                                  </Button>
-                                </div>
-                              </div>
-                            ) : (
-                              <label
-                                key={uni}
-                                className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-sm"
-                                onClick={() => toggleUniversity(uni)}
-                              >
-                                <span>{uni}</span>
-                                {selectedUniversities.includes(uni) && (
-                                  <span className="text-xs text-green-600">✓</span>
-                                )}
-                              </label>
-                            )
+                          {selectedUniversities.length >= 2 && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              type="button"
+                              onClick={clearAll}
+                              className="w-full text-sm border border-input cursor-pointer"
+                            >
+                              Clear All
+                            </Button>
                           )}
+                          {filteredUniversities.map((uni) => (
+                            <div key={uni}>
+                              {uni === "Other" ? (
+                                <div className="flex flex-col gap-2 px-2 py-1.5">
+                                  <label className="text-sm">Other (specify)</label>
+                                  <div className="flex items-center gap-2 mt-1">
+                                    <Input
+                                      placeholder="University name"
+                                      value={customUni}
+                                      onChange={(e) => setCustomUni(e.target.value)}
+                                      onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                          e.preventDefault()
+                                          addCustomUniversity()
+                                        }
+                                      }}
+                                      className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
+                                    />
+                                    <Button
+                                      type="button"
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={addCustomUniversity}
+                                      disabled={!customUni.trim()}
+                                      className="text-xs cursor-pointer"
+                                    >
+                                      Add
+                                    </Button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <label className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-sm">
+                                  <span>{uni}</span>
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedUniversities.includes(uni)}
+                                    onChange={() => toggleUniversity(uni)}
+                                    className="accent-black/80 cursor-pointer"
+                                  />
+                                </label>
+                              )}
+                            </div>
+                          ))}
                         </div>
                       )}
                     </div>
-                    {selectedUniversities.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mt-2 justify-center">
-                        {selectedUniversities.map((uni) => (
-                          <span
-                            key={uni}
-                            className="bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded-full flex items-center gap-1"
-                          >
-                            {uni}
-                            <X
-                              className="w-3 h-3 cursor-pointer"
-                              onClick={() => toggleUniversity(uni)}
-                            />
-                          </span>
-                        ))}
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="ghost"
-                          className="text-xs text-red-600 hover:text-red-800"
-                          onClick={clearAll}
-                        >
-                          Clear All
-                        </Button>
-                      </div>
-                    )}
                     <FormMessage />
                   </FormItem>
                 )}
