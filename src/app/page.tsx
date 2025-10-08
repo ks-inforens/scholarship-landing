@@ -121,7 +121,7 @@ export default function HomePage() {
 
           <FadeInUp delay={0.5}>
             <p className="text-md md:text-lg text-gray-700">
-              We are committing to support<b className="font-semibold">500 international students every year</b> with honest, transparent, and comprehensive guidance, not just for university admissions, but for your <b className="font-semibold">entire career journey abroad</b>.
+              We are committing to support <b className="font-semibold">500 international students every year</b> with honest, transparent, and comprehensive guidance, not just for university admissions, but for your <b className="font-semibold">entire career journey abroad</b>.
             </p>
           </FadeInUp>
 

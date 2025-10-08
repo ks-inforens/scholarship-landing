@@ -348,100 +348,6 @@ export function ScholarshipForm() {
                 )}
               />
 
-              {/* Desired Course */}
-              <FormField
-                control={form.control}
-                name="desiredCourse"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col items-center gap-3">
-                    <FormLabel>Desired Course</FormLabel>
-                    <div ref={courseDropdownRef} className="w-full relative">
-                      <div
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => !submitted && setIsCourseDropdownOpen((p) => !p)}
-                        className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-                      >
-                        <span className="truncate">
-                          {field.value || "Select your desired course"}
-                        </span>
-                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                      </div>
-
-                      {isCourseDropdownOpen && !submitted && (
-                        <div className="absolute z-10 mt-2 w-full rounded-md bg-white border border-input shadow-lg p-3 space-y-2 max-h-60 overflow-y-auto">
-                          <Input
-                            placeholder="Search courses..."
-                            value={courseSearchQuery}
-                            onChange={(e) => setCourseSearchQuery(e.target.value)}
-                            className="border border-gray-300 text-sm mb-2"
-                          />
-
-                          {filteredCourses.map((c) =>
-                            c === "Other" ? (
-                              <div key={c} className="flex flex-col gap-2 px-2 py-1.5">
-                                <label className="text-sm">Other (specify)</label>
-                                <div className="flex items-center gap-2 mt-1">
-                                  <Input
-                                    placeholder="Enter your course"
-                                    value={customCourse}
-                                    onChange={(e) => setCustomCourse(e.target.value)}
-                                    onKeyDown={(e) => {
-                                      if (e.key === "Enter") {
-                                        e.preventDefault()
-                                        const trimmed = customCourse.trim()
-                                        if (trimmed) {
-                                          form.setValue("desiredCourse", trimmed)
-                                          setCustomCourse("")
-                                          setIsCourseDropdownOpen(false)
-                                        }
-                                      }
-                                    }}
-                                    className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
-                                  />
-                                  <Button
-                                    type="button"
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => {
-                                      const trimmed = customCourse.trim()
-                                      if (trimmed) {
-                                        form.setValue("desiredCourse", trimmed)
-                                        setCustomCourse("")
-                                        setIsCourseDropdownOpen(false)
-                                      }
-                                    }}
-                                    disabled={!customCourse.trim()}
-                                    className="text-xs cursor-pointer"
-                                  >
-                                    Add
-                                  </Button>
-                                </div>
-                              </div>
-                            ) : (
-                              <label
-                                key={c}
-                                className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-sm"
-                                onClick={() => {
-                                  form.setValue("desiredCourse", c)
-                                  setIsCourseDropdownOpen(false)
-                                }}
-                              >
-                                <span>{c}</span>
-                                {field.value === c && (
-                                  <span className="text-xs text-green-600">✓</span>
-                                )}
-                              </label>
-                            )
-                          )}
-                        </div>
-                      )}
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
               {/* Preferred Universities */}
               <FormField
                 control={form.control}
@@ -553,6 +459,100 @@ export function ScholarshipForm() {
                               )}
                             </div>
                           ))}
+                        </div>
+                      )}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Desired Course */}
+              <FormField
+                control={form.control}
+                name="desiredCourse"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col items-center gap-3">
+                    <FormLabel>Desired Course</FormLabel>
+                    <div ref={courseDropdownRef} className="w-full relative">
+                      <div
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => !submitted && setIsCourseDropdownOpen((p) => !p)}
+                        className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                      >
+                        <span className="truncate">
+                          {field.value || "Select your desired course"}
+                        </span>
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      </div>
+
+                      {isCourseDropdownOpen && !submitted && (
+                        <div className="absolute z-10 mt-2 w-full rounded-md bg-white border border-input shadow-lg p-3 space-y-2 max-h-60 overflow-y-auto">
+                          <Input
+                            placeholder="Search courses..."
+                            value={courseSearchQuery}
+                            onChange={(e) => setCourseSearchQuery(e.target.value)}
+                            className="border border-gray-300 text-sm mb-2"
+                          />
+
+                          {filteredCourses.map((c) =>
+                            c === "Other" ? (
+                              <div key={c} className="flex flex-col gap-2 px-2 py-1.5">
+                                <label className="text-sm">Other (specify)</label>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <Input
+                                    placeholder="Enter your course"
+                                    value={customCourse}
+                                    onChange={(e) => setCustomCourse(e.target.value)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter") {
+                                        e.preventDefault()
+                                        const trimmed = customCourse.trim()
+                                        if (trimmed) {
+                                          form.setValue("desiredCourse", trimmed)
+                                          setCustomCourse("")
+                                          setIsCourseDropdownOpen(false)
+                                        }
+                                      }
+                                    }}
+                                    className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
+                                  />
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                      const trimmed = customCourse.trim()
+                                      if (trimmed) {
+                                        form.setValue("desiredCourse", trimmed)
+                                        setCustomCourse("")
+                                        setIsCourseDropdownOpen(false)
+                                      }
+                                    }}
+                                    disabled={!customCourse.trim()}
+                                    className="text-xs cursor-pointer"
+                                  >
+                                    Add
+                                  </Button>
+                                </div>
+                              </div>
+                            ) : (
+                              <label
+                                key={c}
+                                className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-sm"
+                                onClick={() => {
+                                  form.setValue("desiredCourse", c)
+                                  setIsCourseDropdownOpen(false)
+                                }}
+                              >
+                                <span>{c}</span>
+                                {field.value === c && (
+                                  <span className="text-xs text-green-600">✓</span>
+                                )}
+                              </label>
+                            )
+                          )}
                         </div>
                       )}
                     </div>
