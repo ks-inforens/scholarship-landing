@@ -25,15 +25,18 @@ export default function HomePage() {
           style={{ backgroundImage: `url('/hero.svg')` }}
         />
         <div className="relative z-10 text-center text-white py-40 px-4">
+          <img src="/logo.png" className='absolute top-6 left-6 h-8 md:h-12' />
           <FadeInUp delay={0.1}>
-            <h1 className='text-4xl md:text-5xl font-bold leading-tight'>Inforens</h1>
             <h1 className="text-4xl md:text-5xl font-bold leading-tight">
               International <span className='bg-clip-text text-transparent bg-gradient-to-b from-orange-50 to-orange-300'>Student Success</span> Programme
             </h1>
           </FadeInUp>
+          <FadeInUp delay={0.3}>
+            <h2 className='mt-2 text-center text-2xl bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-100 font-bold'>(2026 Intake)</h2>
+          </FadeInUp>
           <FadeInUp delay={0.6}>
             <p className="mt-6 max-w-2xl mx-auto text-md font-medium">
-              Inforens has launched a <span className='font-bold'>£2,000 international scholarship</span> to support students from <span className='font-bold'>application</span> to <span className='font-bold'>mentorship</span> abroad, making global education more accessible than ever!
+              We are pleased to announce that we are launching a <span className='font-bold'>£2000 international scholarship</span> to support students from all over the world to get started on an international career path.
             </p>
           </FadeInUp>
           <FadeInUp delay={0.7}>
@@ -59,7 +62,7 @@ export default function HomePage() {
           <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
             <Card className="shadow-md bg-gradient-to-t from-slate-50 to-white">
               <CardHeader>
-                <CardTitle className="text-center bg-clip-text bg-gradient-to-b from-orange-800 to-orange-600 text-transparent font-bold py-1">Academic Support Package</CardTitle>
+                <CardTitle className="text-center bg-clip-text bg-gradient-to-b from-orange-800 to-orange-600 text-transparent font-bold py-1">Financial Support</CardTitle>
                 <CardDescription className='text-center space-y-3'>
                   <p className='text-3xl font-medium'>£500</p>
                   <p className='font-bold text-orange-700/80 uppercase'>deducted off your university fees</p>
@@ -79,7 +82,7 @@ export default function HomePage() {
             </Card>
             <Card className="shadow-md bg-gradient-to-t from-slate-50 to-white">
               <CardHeader className='space-y-2'>
-                <CardTitle className="text-center bg-clip-text bg-gradient-to-b from-orange-800 to-orange-600 text-transparent font-bold py-1">Elite Mentor Network</CardTitle>
+                <CardTitle className="text-center bg-clip-text bg-gradient-to-b from-orange-800 to-orange-600 text-transparent font-bold py-1">Elite Network</CardTitle>
                 <CardDescription className='text-center space-y-2'>
                   <LogoCarousel items={logos} />
                   <p>Access to our strong mentor network working at top companies</p>
@@ -95,7 +98,7 @@ export default function HomePage() {
                     <img className='h-10 w-10 md:h-12 md:w-12 rounded-full border border-black/20' src="/countries/ireland.png" />
                     <img className='h-10 w-10 md:h-12 md:w-12 rounded-full border border-black/20' src="/countries/dubai.png" />
                   </div>
-                  <p>Currently, this scholarship is available to international students planning to study in the UK, Ireland or UAE.</p>
+                  <p>This scholarship is available to all aspiring international students planning to study in the UK, Ireland or UAE.</p>
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -118,7 +121,7 @@ export default function HomePage() {
 
           <FadeInUp delay={0.5}>
             <p className="text-md md:text-lg text-gray-700">
-              We are supporting over <b className="font-semibold">500+ international students every year</b> with honest, transparent, and comprehensive guidance, not just for university admissions, but for your <b className="font-semibold">entire career journey abroad</b>.
+              We are committing to support<b className="font-semibold">500 international students every year</b> with honest, transparent, and comprehensive guidance, not just for university admissions, but for your <b className="font-semibold">entire career journey abroad</b>.
             </p>
           </FadeInUp>
 
@@ -140,8 +143,7 @@ export default function HomePage() {
 
           <FadeInUp delay={1.1}>
             <p className="font-semibold text-lg text-gray-900">
-              Don&rsquo;t just pay tuition &mdash; invest in a programme that pays you back with global opportunities, visa success, scholarships, and a confident future abroad.
-            </p>
+              With our £2,000 Student Success Programme, you gain more than financial aid, you gain a partner in your success. From personalized mentorship to career guidance and scholarship support, we invest in your growth every step of the way!</p>
           </FadeInUp>
         </div>
       </section>

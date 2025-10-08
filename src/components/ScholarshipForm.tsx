@@ -69,6 +69,14 @@ const courseOptions = [
   "Artificial Intelligence",
 ]
 
+const qualificationOptions = [
+  "Schooling",
+  "Undergraduate",
+  "Postgraduate",
+  "PhD",
+  "Other",
+]
+
 export function ScholarshipForm() {
   const form = useForm<ScholarshipFormValues>({
     resolver: zodResolver(ScholarshipFormSchema),
@@ -77,6 +85,7 @@ export function ScholarshipForm() {
       lastName: "",
       email: "",
       phone: "",
+      qualification: "",
       grade: "",
       preferredUniversities: [],
       desiredCourse: "",
@@ -95,14 +104,19 @@ export function ScholarshipForm() {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [showDialog, setShowDialog] = useState(false)
 
-  // ---- Course Dropdown States ----
+  // Qualification dropdown
+  const [isQualificationDropdownOpen, setIsQualificationDropdownOpen] = useState(false)
+  const [customQualification, setCustomQualification] = useState("")
+  const qualificationDropdownRef = useRef<HTMLDivElement>(null)
+
+  // Course dropdown
   const [isCourseDropdownOpen, setIsCourseDropdownOpen] = useState(false)
   const [courseSearchQuery, setCourseSearchQuery] = useState("")
   const [customCourse, setCustomCourse] = useState("")
   const courseDropdownRef = useRef<HTMLDivElement>(null)
 
   const toggleUniversity = (uni: string) => {
-    if (uni === "Other") return // handled separately
+    if (uni === "Other") return
     if (selectedUniversities.includes(uni)) {
       form.setValue(
         "preferredUniversities",
@@ -131,6 +145,10 @@ export function ScholarshipForm() {
     uni.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
+  const filteredCourses = courseOptions.filter((c) =>
+    c.toLowerCase().includes(courseSearchQuery.toLowerCase())
+  )
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -140,6 +158,12 @@ export function ScholarshipForm() {
         setIsDropdownOpen(false)
       }
       if (
+        qualificationDropdownRef.current &&
+        !qualificationDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsQualificationDropdownOpen(false)
+      }
+      if (
         courseDropdownRef.current &&
         !courseDropdownRef.current.contains(event.target as Node)
       ) {
@@ -147,9 +171,7 @@ export function ScholarshipForm() {
       }
     }
     document.addEventListener("mousedown", handleClickOutside)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
+    return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
   async function onSubmit(data: ScholarshipFormValues) {
@@ -160,7 +182,6 @@ export function ScholarshipForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       })
-
       const result = await res.json()
 
       if (result.success) {
@@ -188,6 +209,7 @@ export function ScholarshipForm() {
             This is a highly competitive scholarship opportunity, and only the top 400 applicants with the most compelling and well-thought-out responses will be selected.
           </CardDescription>
         </CardHeader>
+
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -197,7 +219,6 @@ export function ScholarshipForm() {
                 ["lastName", "Last Name", "Doe"],
                 ["email", "Email", "jane.doe@gmail.com"],
                 ["phone", "Phone Number", "(+44) 1234 567890"],
-                ["grade", "Grade (GCPA Percentage or equivalent)", "e.g., 85%"],
               ].map(([name, label, placeholder]) => (
                 <FormField
                   key={name}
@@ -220,6 +241,207 @@ export function ScholarshipForm() {
                 />
               ))}
 
+              {/* Qualification */}
+              <FormField
+                control={form.control}
+                name="qualification"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col items-center gap-3">
+                    <FormLabel>Highest Level of Qualification</FormLabel>
+                    <div ref={qualificationDropdownRef} className="w-full relative">
+                      <div
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => !submitted && setIsQualificationDropdownOpen((p) => !p)}
+                        className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                      >
+                        <span className="truncate">
+                          {field.value || "Select your qualification"}
+                        </span>
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      </div>
+
+                      {isQualificationDropdownOpen && !submitted && (
+                        <div className="absolute z-10 mt-2 w-full rounded-md bg-white border border-input shadow-lg p-3 space-y-2 overflow-y-auto">
+                          {qualificationOptions.map((q) =>
+                            q === "Other" ? (
+                              <div key={q} className="flex flex-col gap-2 px-2 py-1.5">
+                                <label className="text-sm">Other (specify)</label>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <Input
+                                    placeholder="Enter qualification"
+                                    value={customQualification}
+                                    onChange={(e) => setCustomQualification(e.target.value)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter") {
+                                        e.preventDefault()
+                                        const trimmed = customQualification.trim()
+                                        if (trimmed) {
+                                          form.setValue("qualification", trimmed)
+                                          setCustomQualification("")
+                                          setIsQualificationDropdownOpen(false)
+                                        }
+                                      }
+                                    }}
+                                    className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
+                                  />
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                      const trimmed = customQualification.trim()
+                                      if (trimmed) {
+                                        form.setValue("qualification", trimmed)
+                                        setCustomQualification("")
+                                        setIsQualificationDropdownOpen(false)
+                                      }
+                                    }}
+                                    disabled={!customQualification.trim()}
+                                    className="text-xs cursor-pointer"
+                                  >
+                                    Add
+                                  </Button>
+                                </div>
+                              </div>
+                            ) : (
+                              <label
+                                key={q}
+                                className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-sm"
+                                onClick={() => {
+                                  form.setValue("qualification", q)
+                                  setIsQualificationDropdownOpen(false)
+                                }}
+                              >
+                                <span>{q}</span>
+                                {field.value === q && (
+                                  <span className="text-xs text-green-600">✓</span>
+                                )}
+                              </label>
+                            )
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Grade */}
+              <FormField
+                control={form.control}
+                name="grade"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col items-center gap-3">
+                    <FormLabel>Grade (GPA or equivalent)</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g., 85%"
+                        className="border border-input bg-white text-sm"
+                        {...field}
+                        disabled={submitted}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Desired Course */}
+              <FormField
+                control={form.control}
+                name="desiredCourse"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col items-center gap-3">
+                    <FormLabel>Desired Course</FormLabel>
+                    <div ref={courseDropdownRef} className="w-full relative">
+                      <div
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => !submitted && setIsCourseDropdownOpen((p) => !p)}
+                        className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                      >
+                        <span className="truncate">
+                          {field.value || "Select your desired course"}
+                        </span>
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      </div>
+
+                      {isCourseDropdownOpen && !submitted && (
+                        <div className="absolute z-10 mt-2 w-full rounded-md bg-white border border-input shadow-lg p-3 space-y-2 max-h-60 overflow-y-auto">
+                          <Input
+                            placeholder="Search courses..."
+                            value={courseSearchQuery}
+                            onChange={(e) => setCourseSearchQuery(e.target.value)}
+                            className="border border-gray-300 text-sm mb-2"
+                          />
+
+                          {filteredCourses.map((c) =>
+                            c === "Other" ? (
+                              <div key={c} className="flex flex-col gap-2 px-2 py-1.5">
+                                <label className="text-sm">Other (specify)</label>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <Input
+                                    placeholder="Enter your course"
+                                    value={customCourse}
+                                    onChange={(e) => setCustomCourse(e.target.value)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter") {
+                                        e.preventDefault()
+                                        const trimmed = customCourse.trim()
+                                        if (trimmed) {
+                                          form.setValue("desiredCourse", trimmed)
+                                          setCustomCourse("")
+                                          setIsCourseDropdownOpen(false)
+                                        }
+                                      }
+                                    }}
+                                    className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
+                                  />
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                      const trimmed = customCourse.trim()
+                                      if (trimmed) {
+                                        form.setValue("desiredCourse", trimmed)
+                                        setCustomCourse("")
+                                        setIsCourseDropdownOpen(false)
+                                      }
+                                    }}
+                                    disabled={!customCourse.trim()}
+                                    className="text-xs cursor-pointer"
+                                  >
+                                    Add
+                                  </Button>
+                                </div>
+                              </div>
+                            ) : (
+                              <label
+                                key={c}
+                                className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-sm"
+                                onClick={() => {
+                                  form.setValue("desiredCourse", c)
+                                  setIsCourseDropdownOpen(false)
+                                }}
+                              >
+                                <span>{c}</span>
+                                {field.value === c && (
+                                  <span className="text-xs text-green-600">✓</span>
+                                )}
+                              </label>
+                            )
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               {/* Preferred Universities */}
               <FormField
                 control={form.control}
@@ -232,204 +454,98 @@ export function ScholarshipForm() {
                         role="button"
                         tabIndex={0}
                         onClick={() => !submitted && setIsDropdownOpen((p) => !p)}
-                        className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-                          }`}
+                        className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                       >
-                        <div className="flex flex-wrap gap-1 items-center">
-                          {selectedUniversities.length > 0 ? (
-                            selectedUniversities.map((uni) => (
-                              <span
-                                key={uni}
-                                className="flex items-center gap-1 bg-gray-100 text-gray-800 px-2 py-0.5 rounded-full text-xs"
-                              >
-                                {uni}
-                                {!submitted && (
-                                  <X
-                                    className="h-3 w-3 cursor-pointer"
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      form.setValue(
-                                        "preferredUniversities",
-                                        selectedUniversities.filter((u) => u !== uni)
-                                      )
-                                    }}
-                                  />
-                                )}
-                              </span>
-                            ))
-                          ) : (
-                            <span className="text-muted-foreground text-sm">Select universities</span>
-                          )}
-                        </div>
+                        <span className="truncate">
+                          {selectedUniversities.length > 0
+                            ? `${selectedUniversities.length} selected`
+                            : "Select universities"}
+                        </span>
                         <ChevronDown className="h-4 w-4 text-muted-foreground" />
                       </div>
 
                       {isDropdownOpen && !submitted && (
                         <div className="absolute z-10 mt-2 w-full rounded-md bg-white border border-input shadow-lg p-3 space-y-2 max-h-60 overflow-y-auto">
                           <Input
+                            placeholder="Search universities..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search..."
-                            className="w-full rounded-full bg-gray-100 border-none px-4 text-sm mb-2"
+                            className="border border-gray-300 text-sm mb-2"
                           />
-                          {selectedUniversities.length >= 2 && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              type="button"
-                              onClick={clearAll}
-                              className="w-full text-sm border border-input cursor-pointer"
-                            >
-                              Clear All
-                            </Button>
-                          )}
-                          {filteredUniversities.map((uni) => (
-                            <div key={uni}>
-                              {uni === "Other" ? (
-                                <div className="flex flex-col gap-2 px-2 py-1.5">
-                                  <label className="text-sm">Other (specify)</label>
-                                  <div className="flex items-center gap-2 mt-1">
-                                    <Input
-                                      placeholder="University name"
-                                      value={customUni}
-                                      onChange={(e) => setCustomUni(e.target.value)}
-                                      onKeyDown={(e) => {
-                                        if (e.key === "Enter") {
-                                          e.preventDefault()
-                                          addCustomUniversity()
-                                        }
-                                      }}
-                                      className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
-                                    />
-                                    <Button
-                                      type="button"
-                                      size="sm"
-                                      variant="outline"
-                                      onClick={addCustomUniversity}
-                                      disabled={!customUni.trim()}
-                                      className="text-xs cursor-pointer"
-                                    >
-                                      Add
-                                    </Button>
-                                  </div>
-                                </div>
-                              ) : (
-                                <label className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-sm">
-                                  <span>{uni}</span>
-                                  <input
-                                    type="checkbox"
-                                    checked={selectedUniversities.includes(uni)}
-                                    onChange={() => toggleUniversity(uni)}
-                                    className="accent-black/80 cursor-pointer"
+
+                          {filteredUniversities.map((uni) =>
+                            uni === "Other" ? (
+                              <div key={uni} className="flex flex-col gap-2 px-2 py-1.5">
+                                <label className="text-sm">Other (specify)</label>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <Input
+                                    placeholder="Enter university name"
+                                    value={customUni}
+                                    onChange={(e) => setCustomUni(e.target.value)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter") {
+                                        e.preventDefault()
+                                        addCustomUniversity()
+                                      }
+                                    }}
+                                    className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
                                   />
-                                </label>
-                              )}
-                            </div>
-                          ))}
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={addCustomUniversity}
+                                    disabled={!customUni.trim()}
+                                    className="text-xs cursor-pointer"
+                                  >
+                                    Add
+                                  </Button>
+                                </div>
+                              </div>
+                            ) : (
+                              <label
+                                key={uni}
+                                className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-sm"
+                                onClick={() => toggleUniversity(uni)}
+                              >
+                                <span>{uni}</span>
+                                {selectedUniversities.includes(uni) && (
+                                  <span className="text-xs text-green-600">✓</span>
+                                )}
+                              </label>
+                            )
+                          )}
                         </div>
                       )}
                     </div>
+                    {selectedUniversities.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-2 justify-center">
+                        {selectedUniversities.map((uni) => (
+                          <span
+                            key={uni}
+                            className="bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded-full flex items-center gap-1"
+                          >
+                            {uni}
+                            <X
+                              className="w-3 h-3 cursor-pointer"
+                              onClick={() => toggleUniversity(uni)}
+                            />
+                          </span>
+                        ))}
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="ghost"
+                          className="text-xs text-red-600 hover:text-red-800"
+                          onClick={clearAll}
+                        >
+                          Clear All
+                        </Button>
+                      </div>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
-              />
-
-              {/* Desired Course */}
-              <FormField
-                control={form.control}
-                name="desiredCourse"
-                render={({ field }) => {
-                  const filteredCourses = courseOptions.filter((course) =>
-                    course.toLowerCase().includes(courseSearchQuery.toLowerCase())
-                  )
-
-                  const addCustomCourse = () => {
-                    const trimmed = customCourse.trim()
-                    if (trimmed) {
-                      form.setValue("desiredCourse", trimmed)
-                      setCustomCourse("")
-                      setIsCourseDropdownOpen(false)
-                    }
-                  }
-
-                  return (
-                    <FormItem className="flex flex-col items-center gap-3">
-                      <FormLabel>Desired Course</FormLabel>
-                      <div ref={courseDropdownRef} className="w-full relative">
-                        <div
-                          role="button"
-                          tabIndex={0}
-                          onClick={() => !submitted && setIsCourseDropdownOpen((p) => !p)}
-                          className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-                            }`}
-                        >
-                          <span className="truncate">
-                            {field.value || "Select your desired course"}
-                          </span>
-                          <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                        </div>
-
-                        {isCourseDropdownOpen && !submitted && (
-                          <div className="absolute z-10 mt-2 w-full rounded-md bg-white border border-input shadow-lg p-3 space-y-2 max-h-60 overflow-y-auto">
-                            <Input
-                              value={courseSearchQuery}
-                              onChange={(e) => setCourseSearchQuery(e.target.value)}
-                              placeholder="Search..."
-                              className="w-full rounded-full bg-gray-100 border-none px-4 text-sm mb-2"
-                            />
-                            {filteredCourses.map((course) => (
-                              <div key={course}>
-                                {course === "Other" ? (
-                                  <div className="flex flex-col gap-2 px-2 py-1.5">
-                                    <label className="text-sm">Other (specify)</label>
-                                    <div className="flex items-center gap-2 mt-1">
-                                      <Input
-                                        placeholder="Course name"
-                                        value={customCourse}
-                                        onChange={(e) => setCustomCourse(e.target.value)}
-                                        onKeyDown={(e) => {
-                                          if (e.key === "Enter") {
-                                            e.preventDefault()
-                                            addCustomCourse()
-                                          }
-                                        }}
-                                        className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
-                                      />
-                                      <Button
-                                        type="button"
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={addCustomCourse}
-                                        disabled={!customCourse.trim()}
-                                        className="text-xs cursor-pointer"
-                                      >
-                                        Add
-                                      </Button>
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <label
-                                    className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-sm"
-                                    onClick={() => {
-                                      form.setValue("desiredCourse", course)
-                                      setIsCourseDropdownOpen(false)
-                                    }}
-                                  >
-                                    <span>{course}</span>
-                                    {field.value === course && (
-                                      <span className="text-xs text-green-600">✓</span>
-                                    )}
-                                  </label>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )
-                }}
               />
 
               {/* Justification */}
@@ -438,12 +554,13 @@ export function ScholarshipForm() {
                 name="justification"
                 render={({ field }) => (
                   <FormItem className="flex flex-col items-center gap-3">
-                    <FormLabel>Why do you believe you deserve this scholarship?</FormLabel>
+                    <FormLabel>
+                      Why do you deserve this scholarship?
+                    </FormLabel>
                     <FormControl>
                       <Textarea
-                        rows={4}
-                        placeholder="Share your reasons..."
-                        className="border border-input bg-white text-sm"
+                        placeholder="Write your response here..."
+                        className="border border-input bg-white text-sm min-h-[120px]"
                         {...field}
                         disabled={submitted}
                       />
@@ -459,12 +576,13 @@ export function ScholarshipForm() {
                 name="benefit"
                 render={({ field }) => (
                   <FormItem className="flex flex-col items-center gap-3">
-                    <FormLabel>How will receiving this scholarship benefit you?</FormLabel>
+                    <FormLabel>
+                      How will this scholarship benefit you?
+                    </FormLabel>
                     <FormControl>
                       <Textarea
-                        rows={4}
-                        placeholder="Explain how this opportunity will help you..."
-                        className="border border-input bg-white text-sm"
+                        placeholder="Explain how this scholarship will impact your education or career..."
+                        className="border border-input bg-white text-sm min-h-[120px]"
                         {...field}
                         disabled={submitted}
                       />
@@ -474,8 +592,7 @@ export function ScholarshipForm() {
                 )}
               />
 
-              {/* Submit Button */}
-              <div className="flex flex-col items-center justify-center gap-4">
+              <div className="flex justify-center">
                 <Button
                   type="submit"
                   className="w-full max-w-sm bg-[#db5800] hover:bg-[#cb5100] text-white rounded-full cursor-pointer"
@@ -491,34 +608,15 @@ export function ScholarshipForm() {
 
       {/* Dialog after submission */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent className="max-w-md rounded-xl">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-green-800 text-xl">Application Submitted 🎉</DialogTitle>
-            <DialogDescription className="text-sm text-muted-foreground mt-2">
-              Your application has been submitted successfully!
-            </DialogDescription>
-            <DialogDescription className="text-sm text-muted-foreground">
-              Our admissions team is reviewing your application and will contact you soon.
+            <DialogTitle>Application Submitted</DialogTitle>
+            <DialogDescription>
+              Thank you for applying! We’ll review your submission and reach out soon.
             </DialogDescription>
           </DialogHeader>
-
-          <div className="mt-2 space-y-3">
-            <h3 className="text-md font-semibold text-black/80">Next Steps</h3>
-            <ul className="list-disc list-inside text-sm text-black/60 space-y-1">
-              <li>Login or create an account on Inforens to track your application status.</li>
-              <li>Join our student community to connect with peers and mentors.</li>
-              <li>Explore other plans and benefits we offer to international students.</li>
-            </ul>
-          </div>
-
-          <DialogFooter className="flex flex-col gap-2 mt-4 sm:flex-row sm:justify-start">
-            <a
-              href="https://www.inforens.com"
-              target="_blank"
-              className="justify-center items-center rounded-md bg-[#db5800] px-4 py-2 text-sm font-medium text-white hover:bg-[#cb5100] transition"
-            >
-              Login Now
-            </a>
+          <DialogFooter>
+            <Button onClick={() => setShowDialog(false)}>Close</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
