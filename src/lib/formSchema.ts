@@ -13,6 +13,7 @@ export const ScholarshipFormSchema = z.object({
     .max(15, "Phone number is too long")
     .regex(/^\+?[0-9\s\-()]{7,15}$/, "Enter a valid phone number"),
 
+  grade: z.string().min(1, "Please enter your grade"),
   preferredUniversities: z.array(z.string()).min(1, "At least one university must be selected"),
   desiredCourse: z.string().min(1, "Select a course"),
 

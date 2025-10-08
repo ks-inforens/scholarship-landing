@@ -9,9 +9,10 @@ import {
 import { Button } from '@/components/ui/button'
 import { ScholarshipForm } from '@/components/ScholarshipForm'
 import { FadeInUp } from '@/lib/animations'
-import { Mentors } from '@/components/Mentors'
-import { LogoCarousel } from '@/components/Carousel'
+import { ImgCarousel } from '@/components/Carousel'
 import { EventsGallery } from '@/components/EventsGallery'
+import { logos, universities } from '@/data/imagesData'
+import { Steps } from '@/components/Steps'
 
 export default function HomePage() {
   return (
@@ -31,7 +32,7 @@ export default function HomePage() {
           </FadeInUp>
           <FadeInUp delay={0.6}>
             <p className="mt-6 max-w-2xl mx-auto text-md font-medium">
-              We have repositioned our <span className='font-bold'>£2,000</span> support initiative from a traditional &ldquo;scholarship&ldquo; to a comprehensive student success programme.
+              Inforens has launched a <span className='font-bold'>£2,000 international scholarship</span> to support students from <span className='font-bold'>application</span> to <span className='font-bold'>mentorship</span> abroad, making global education more accessible than ever!
             </p>
           </FadeInUp>
           <FadeInUp delay={0.7}>
@@ -79,7 +80,7 @@ export default function HomePage() {
               <CardHeader className='space-y-2'>
                 <CardTitle className="text-center bg-clip-text bg-gradient-to-b from-orange-800 to-orange-600 text-transparent font-bold py-1">Elite Mentor Network</CardTitle>
                 <CardDescription className='text-center space-y-2'>
-                  <LogoCarousel />
+                  <ImgCarousel items={logos} />
                   <p>Access to our strong mentor network working at top companies</p>
                 </CardDescription>
               </CardHeader>
@@ -105,7 +106,7 @@ export default function HomePage() {
       <section className="my-16 px-4 w-full max-w-5xl flex flex-col md:flex-row items-center gap-8">
         <div className="space-y-6 text-center md:text-left">
           <FadeInUp delay={0.1}>
-            <h2 className="text-3xl font-semibold text-gray-900">Why This Programme?</h2>
+            <h2 className="text-3xl font-semibold text-gray-900 text-center">Why This Programme?</h2>
           </FadeInUp>
 
           <FadeInUp delay={0.3}>
@@ -116,39 +117,18 @@ export default function HomePage() {
 
           <FadeInUp delay={0.5}>
             <p className="text-md md:text-lg text-gray-700">
-              We support over <b className="font-semibold">400+ international students every year</b> with honest, transparent, and comprehensive guidance &mdash; not just for university admissions, but for your <b className="font-semibold">entire career journey abroad</b>.
+              We are supporting over <b className="font-semibold">500+ international students every year</b> with honest, transparent, and comprehensive guidance, not just for university admissions, but for your <b className="font-semibold">entire career journey abroad</b>.
             </p>
           </FadeInUp>
 
           <FadeInUp delay={0.7}>
             <p className="text-md md:text-lg text-gray-700">
-              We connect you with real mentors, real alumni, and real admissions professionals from top global institutions &mdash; including <b className="font-semibold">Cambridge, Oxford, UCL, Imperial</b> and many others.
+              We connect you with real mentors, real alumni, and real admissions professionals from top global institutions, including <b className="font-semibold">Oxford, UCL, Imperial, LBS, LSE, Trinity College Dublin, University College Dublin, NYU Abu Dhabi, Zayed University</b> and many other universities.
             </p>
           </FadeInUp>
 
           <FadeInUp delay={0.7}>
-            <div className='flex justify-center md:justify-start gap-8 px-2'>
-              <img
-                src="/universities/cambridge.svg"
-                alt="Mentorship"
-                className="rounded-2xl h-16"
-              />
-              <img
-                src="/universities/oxford.svg"
-                alt="Mentorship"
-                className="rounded-2xl h-16"
-              />
-              <img
-                src="/universities/ucl.svg"
-                alt="Mentorship"
-                className="rounded-2xl h-16"
-              />
-              <img
-                src="/universities/imperial.svg"
-                alt="Mentorship"
-                className="rounded-2xl h-16"
-              />
-            </div>
+            <ImgCarousel items={universities} />
           </FadeInUp>
 
           <FadeInUp delay={0.9}>
@@ -165,9 +145,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className='w-full px-4 mb-16'>
-        <EventsGallery />
-      </section>
+      <FadeInUp delay={0.7} className='w-full'>
+        <section className='w-full px-4 mb-16'>
+          <EventsGallery />
+        </section>
+      </FadeInUp>
 
       {/* Application Form Section */}
       <FadeInUp delay={0.7} className='w-full'>
@@ -175,6 +157,15 @@ export default function HomePage() {
           <ScholarshipForm />
         </div>
       </FadeInUp>
-    </main>
+
+      <section id='nextSteps' className="my-16 px-4 w-full max-w-5xl flex flex-col md:flex-row items-center gap-8">
+        <div className="space-y-6 text-center md:text-left">
+          <FadeInUp delay={0.1}>
+            <h2 className="text-3xl font-semibold text-gray-900 text-center">How we will help you!</h2>
+          </FadeInUp>
+          <Steps />
+        </div>
+      </section >
+    </main >
   )
 }

@@ -23,7 +23,6 @@ import {
 } from "@/components/ui/card"
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -50,12 +49,16 @@ const courseOptions = [
 ]
 
 const universityOptions = [
+  "Other",
   "University of Oxford",
-  "Harvard University",
-  "MIT",
-  "University of Toronto",
-  "National University of Singapore",
+  "University College London (UCL)",
+  "London School of Economics (LSE)",
+  "London Business School (LBS)",
+  "Imperial College London",
+  "Trinity College Dublin",
   "University College Dublin",
+  "New York University, Abu Dhabi (NYUAD)",
+  "Zayed University",
 ]
 
 export function ScholarshipForm() {
@@ -66,6 +69,7 @@ export function ScholarshipForm() {
       lastName: "",
       email: "",
       phone: "",
+      grade: "",
       preferredUniversities: [],
       desiredCourse: "",
       justification: "",
@@ -78,11 +82,13 @@ export function ScholarshipForm() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [submitted, setSubmitted] = useState(false)
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
+  const [customUni, setCustomUni] = useState("")
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [showDialog, setShowDialog] = useState(false)
 
   const toggleUniversity = (uni: string) => {
+    if (uni === "Other") return // handled separately
     if (selectedUniversities.includes(uni)) {
       form.setValue(
         "preferredUniversities",
@@ -90,6 +96,15 @@ export function ScholarshipForm() {
       )
     } else {
       form.setValue("preferredUniversities", [...selectedUniversities, uni])
+    }
+  }
+
+  const addCustomUniversity = () => {
+    const trimmed = customUni.trim()
+    if (trimmed && !selectedUniversities.includes(trimmed)) {
+      form.setValue("preferredUniversities", [...selectedUniversities, trimmed])
+      setCustomUni("")
+      setIsDropdownOpen(false)
     }
   }
 
@@ -120,7 +135,7 @@ export function ScholarshipForm() {
   }, [isDropdownOpen])
 
   async function onSubmit(data: ScholarshipFormValues) {
-    setLoading(true);
+    setLoading(true)
     try {
       const res = await fetch("/api/submit", {
         method: "POST",
@@ -142,7 +157,7 @@ export function ScholarshipForm() {
     } catch (err) {
       toast.error("Error submitting form. Please try again.")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
@@ -160,7 +175,7 @@ export function ScholarshipForm() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              {/* Full Name */}
+              {/* First Name */}
               <FormField
                 control={form.control}
                 name="firstName"
@@ -180,6 +195,7 @@ export function ScholarshipForm() {
                 )}
               />
 
+              {/* Last Name */}
               <FormField
                 control={form.control}
                 name="lastName"
@@ -199,6 +215,7 @@ export function ScholarshipForm() {
                 )}
               />
 
+              {/* Email */}
               <FormField
                 control={form.control}
                 name="email"
@@ -218,6 +235,7 @@ export function ScholarshipForm() {
                 )}
               />
 
+              {/* Phone */}
               <FormField
                 control={form.control}
                 name="phone"
@@ -227,6 +245,26 @@ export function ScholarshipForm() {
                     <FormControl>
                       <Input
                         placeholder="(+44) 1234 567890"
+                        className="border border-input bg-white text-sm"
+                        {...field}
+                        disabled={submitted}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Grade */}
+              <FormField
+                control={form.control}
+                name="grade"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col items-center gap-3">
+                    <FormLabel>Grade (GCPA Percentage or equivalent)</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g., 85%"
                         className="border border-input bg-white text-sm"
                         {...field}
                         disabled={submitted}
@@ -253,8 +291,9 @@ export function ScholarshipForm() {
                         onKeyDown={(e) => {
                           if (e.key === "Enter" && !submitted) setIsDropdownOpen((prev) => !prev)
                         }}
-                        className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-                          }`}
+                        className={`w-full border border-input rounded-md shadow-xs px-3 py-2 flex items-center justify-between text-sm bg-white ${
+                          submitted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                        }`}
                       >
                         <div className="flex flex-wrap gap-1 items-center">
                           {selectedUniversities.length > 0 ? (
@@ -269,7 +308,10 @@ export function ScholarshipForm() {
                                     className="h-3 w-3 cursor-pointer"
                                     onClick={(e) => {
                                       e.stopPropagation()
-                                      toggleUniversity(uni)
+                                      form.setValue(
+                                        "preferredUniversities",
+                                        selectedUniversities.filter((u) => u !== uni)
+                                      )
                                     }}
                                   />
                                 )}
@@ -303,18 +345,52 @@ export function ScholarshipForm() {
                             </Button>
                           )}
                           {filteredUniversities.map((uni) => (
-                            <label
-                              key={uni}
-                              className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-sm"
-                            >
-                              <span>{uni}</span>
-                              <input
-                                type="checkbox"
-                                checked={selectedUniversities.includes(uni)}
-                                onChange={() => toggleUniversity(uni)}
-                                className="accent-black/80 cursor-pointer"
-                              />
-                            </label>
+                            <div key={uni}>
+                              {uni === "Other" ? (
+                                <div className="flex flex-col gap-2 px-2 py-1.5">
+                                  <label className="flex items-center justify-between cursor-pointer text-sm">
+                                    <span>Other (specify)</span>
+                                  </label>
+
+                                  <div className="flex items-center gap-2 mt-1">
+                                    <Input
+                                      placeholder="Enter custom university name"
+                                      value={customUni}
+                                      onChange={(e) => setCustomUni(e.target.value)}
+                                      onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                          e.preventDefault()
+                                          addCustomUniversity()
+                                        }
+                                      }}
+                                      className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
+                                    />
+                                    <Button
+                                      type="button"
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={addCustomUniversity}
+                                      disabled={!customUni.trim()}
+                                      className="text-xs cursor-pointer"
+                                    >
+                                      Add
+                                    </Button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <label
+                                  className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer text-sm"
+                                >
+                                  <span>{uni}</span>
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedUniversities.includes(uni)}
+                                    onChange={() => toggleUniversity(uni)}
+                                    className="accent-black/80 cursor-pointer"
+                                  />
+                                </label>
+                              )}
+                            </div>
                           ))}
                         </div>
                       )}
@@ -393,7 +469,7 @@ export function ScholarshipForm() {
               />
 
               {/* Submit Button */}
-              <div className="flex justify-center">
+              <div className="flex flex-col items-center justify-center gap-4">
                 <Button
                   type="submit"
                   className="w-full max-w-sm bg-[#db5800] hover:bg-[#cb5100] text-white rounded-full cursor-pointer"
@@ -407,7 +483,7 @@ export function ScholarshipForm() {
         </CardContent>
       </Card>
 
-      {/* Next Steps after Submission */}
+      {/* Dialog after submission */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent className="max-w-md rounded-xl">
           <DialogHeader>
@@ -416,15 +492,15 @@ export function ScholarshipForm() {
               Your application has been submitted successfully!
             </DialogDescription>
             <DialogDescription className="text-sm text-muted-foreground">
-              Our admissions team is reviewing your application and will contact with regards to the decision soon.
+              Our admissions team is reviewing your application and will contact you soon.
             </DialogDescription>
           </DialogHeader>
 
           <div className="mt-2 space-y-3">
             <h3 className="text-md font-semibold text-black/80">Next Steps</h3>
             <ul className="list-disc list-inside text-sm text-black/60 space-y-1">
-              <li>Login/create an account on Inforens to track your application status.</li>
-              <li>Join our vibrant student community to connect with peers and mentors.</li>
+              <li>Login or create an account on Inforens to track your application status.</li>
+              <li>Join our student community to connect with peers and mentors.</li>
               <li>Explore other plans and benefits we offer to international students.</li>
             </ul>
           </div>
