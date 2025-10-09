@@ -74,7 +74,7 @@ export function Steps() {
         <section className="relative px-4 md:px-12 lg:px-24">
             <div className="relative border-l-2 border-black/80">
                 {steps.map((step, idx) => (
-                    <FadeInUp key={idx} delay={idx * 0.15}>
+                    <FadeInUp key={idx} delay={idx * 0.1}>
                         <div className="mb-10 ml-4 relative group">
                             {/* Circle marker */}
                             <span className="absolute flex justify-center items-center -left-[33px] top-0 w-8 h-8 bg-black/80 rounded-full shadow-md z-10">

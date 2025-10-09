@@ -26,6 +26,7 @@ export default function HomePage() {
         />
         <div className="relative z-10 text-center text-white py-40 px-4">
           <img src="/logo.png" className='absolute top-6 left-6 h-8 md:h-12' />
+          <img src="/nori.png" className='absolute hidden lg:block -bottom-0.5 right-4 h-56 transform -scale-x-100' />
           <FadeInUp delay={0.1}>
             <h1 className="text-4xl md:text-5xl font-bold leading-tight">
               International <span className='bg-clip-text text-transparent bg-gradient-to-b from-orange-50 to-orange-300'>Student Success</span> Programme
@@ -66,7 +67,7 @@ export default function HomePage() {
                 <CardDescription className='text-center space-y-3'>
                   <p className='text-3xl font-medium'>£500</p>
                   <p className='font-bold text-orange-700/80 uppercase'>deducted off your university fees</p>
-                  <p>We will directly contribute £500 to be deducted from your university fees.</p>
+                  <p>We will directly contribute £500 towards your university fees.</p>
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -127,7 +128,7 @@ export default function HomePage() {
 
           <FadeInUp delay={0.7}>
             <p className="text-md md:text-lg text-gray-700">
-              We connect you with real mentors, real alumni, and real admissions professionals from top global institutions, including <b className="font-semibold">Oxford, UCL, Imperial, LBS, LSE, Trinity College Dublin, University College Dublin, NYU Abu Dhabi, Zayed University</b> and many other universities in the UK, Ireland and UAE.
+              We connect you with real mentors, real alumni, and real professionals from top global institutions, including <b className="font-semibold">Oxford, UCL, Imperial, LBS, LSE, Trinity College Dublin, University College Dublin, NYU Abu Dhabi, Zayed University</b> and many other universities in the UK, Ireland and UAE.
             </p>
           </FadeInUp>
 
@@ -137,7 +138,7 @@ export default function HomePage() {
 
           <FadeInUp delay={0.9}>
             <p className="text-md md:text-lg text-gray-700">
-              Whether you are from a Tier-2 city, a remote town, or anywhere across the globe, we empower you with <b className="font-semibold">trusted information, mentorship, and funding options</b> that are proven to work.
+              It does not matter where you are coming from, with Inforens you will be empowered with <b className="font-semibold">trusted information, mentorship and funding options</b> that are <b className="font-semibold">proven</b> to work.
             </p>
           </FadeInUp>
 

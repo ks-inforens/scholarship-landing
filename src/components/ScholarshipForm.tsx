@@ -206,7 +206,7 @@ export function ScholarshipForm() {
             Apply Now!
           </CardTitle>
           <CardDescription className="text-center space-y-1">
-            This is a highly competitive scholarship opportunity, and only the top 400 applicants with the most compelling and well-thought-out responses will be selected.
+            This is a highly competitive scholarship opportunity, and only the top 500 applicants with the most compelling and well-thought-out responses will be selected.
           </CardDescription>
         </CardHeader>
 
@@ -218,7 +218,7 @@ export function ScholarshipForm() {
                 ["firstName", "First Name", "Jane"],
                 ["lastName", "Last Name", "Doe"],
                 ["email", "Email", "jane.doe@gmail.com"],
-                ["phone", "Phone Number", "(+44) 1234 567890"],
+                ["phone", "Phone Number", "(+91) 1234 567890"],
               ].map(([name, label, placeholder]) => (
                 <FormField
                   key={name}
